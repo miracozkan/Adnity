@@ -1,0 +1,127 @@
+package com.mihanitylabs.adnitylib.openappad
+
+import android.app.Activity
+import android.app.Application
+import android.os.Bundle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.appopen.AppOpenAd
+import com.mihanitylabs.adnitylib.util.provideAdRequest
+import java.util.*
+
+
+// Code with ❤️
+//┌─────────────────────────────┐
+//│ Created by Mirac Ozkan      │
+//│ ─────────────────────────── │
+//│ mirac.ozkan123@gmail.com    │            
+//│ ─────────────────────────── │
+//│ 1/26/2021 - 9:33 PM         │
+//└─────────────────────────────┘
+
+
+class AppOpenAdManager(
+    private val application: Application,
+    private val appOpenAdConfig: AppOpenAdConfig
+) : Application.ActivityLifecycleCallbacks, LifecycleObserver {
+
+    init {
+        application.registerActivityLifecycleCallbacks(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this@AppOpenAdManager)
+    }
+
+    private var loadTime = 0L
+    private var currentActivity: Activity? = null
+    private var appOpenAd: AppOpenAd? = null
+    private lateinit var loadCallback: AppOpenAd.AppOpenAdLoadCallback
+    private var isShowingAd = false
+
+    private fun fetchAd() {
+        if (isAdAvailable()) {
+            return
+        }
+        loadCallback = object : AppOpenAd.AppOpenAdLoadCallback() {
+            override fun onAppOpenAdLoaded(ad: AppOpenAd) {
+                appOpenAd = ad
+                loadTime = Date().time
+                appOpenAdConfig.onSuccess?.invoke(ad)
+            }
+
+            override fun onAppOpenAdFailedToLoad(loadAdError: LoadAdError) {
+                appOpenAdConfig.onError?.invoke(Exception(loadAdError.cause?.message))
+            }
+        }
+        AppOpenAd.load(
+            application.applicationContext,
+            appOpenAdConfig.openAppAdId,
+            provideAdRequest(),
+            AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
+            loadCallback
+        )
+    }
+
+    private fun showAdIfAvailable() {
+        if (!isShowingAd && isAdAvailable()) {
+            val fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    appOpenAd = null
+                    isShowingAd = false
+                    fetchAd()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    appOpenAdConfig.onError?.invoke(Exception(adError.cause?.message))
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    isShowingAd = true
+                }
+            }
+            appOpenAd?.show(currentActivity, fullScreenContentCallback)
+        } else {
+            fetchAd()
+        }
+    }
+
+    private fun isAdAvailable() = appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4)
+
+    private fun wasLoadTimeLessThanNHoursAgo(numHours: Long = 4): Boolean {
+        val dateDifference = Date().time - loadTime
+        return dateDifference < numMilliSecondsPerHour * numHours
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onStart() {
+        showAdIfAvailable()
+    }
+
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}
+
+    override fun onActivityStarted(activity: Activity) {
+        currentActivity = activity
+    }
+
+    override fun onActivityResumed(activity: Activity) {
+        currentActivity = activity
+    }
+
+    override fun onActivityPaused(activity: Activity) {}
+
+    override fun onActivityStopped(activity: Activity) {}
+
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
+
+    override fun onActivityDestroyed(activity: Activity) {
+        currentActivity = null
+    }
+
+    companion object {
+        private const val TAG = "AppOpenAdManager"
+        private const val numMilliSecondsPerHour = 3600000L
+    }
+}

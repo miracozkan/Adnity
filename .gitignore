@@ -1,0 +1,11 @@
+.gradle/
+build/
+local.properties
+*.log
+.navigation/
+captures/
+.idea/
+*.iml
+.getExternalNativeBuildProviders
+app/mapping.txt
+.DS_Store

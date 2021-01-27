@@ -16,21 +16,53 @@ import androidx.lifecycle.ProcessLifecycleOwner
 //│ 1/26/2021 - 9:31 PM         │
 //└─────────────────────────────┘
 
-class InterstitialAdScheduler(
-    private val timeInterval: Long = 30000L,
-    private val onTimeFinished: () -> Unit
-) : LifecycleObserver {
+class InterstitialAdScheduler private constructor() : LifecycleObserver {
 
     private var countDownTimer: CountDownTimer? = null
+    private var timeInterval: Long? = null
+    private var onTimeFinished: (() -> Unit?)? = null
 
     init {
-        prepareTime(timeInterval)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
     }
 
-    fun reloadTimer() {
-        prepareTime(timeInterval)
+    fun init(timeIntervalInMinute: Int): InterstitialAdScheduler {
+        timeInterval = timeIntervalInMinute * MINUTE_IN_MILLIS
+        prepareTime()
+        return this
+    }
+
+    fun setOnTimeFinishedListener(listener: () -> Unit) {
+        onTimeFinished = listener
+    }
+
+    private fun prepareTime() {
+        countDownTimer = object : CountDownTimer(timeInterval!!, SECOND_IN_MILLIS) {
+            override fun onTick(millisUntilFinished: Long) {}
+
+            override fun onFinish() {
+                onTimeFinished?.invoke()
+                reloadTimer()
+            }
+        }
+    }
+
+    private fun startTimer() {
+        countDownTimer?.start()
+    }
+
+    private fun reloadTimer() {
+        prepareTime()
         startTimer()
+    }
+
+    private fun stopTimer() {
+        countDownTimer?.cancel()
+    }
+
+    private fun clearTimer() {
+        stopTimer()
+        countDownTimer = null
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -48,30 +80,19 @@ class InterstitialAdScheduler(
         clearTimer()
     }
 
-    private fun prepareTime(timeInterval: Long) {
-        countDownTimer = object : CountDownTimer(timeInterval, SECOND_IN_MILLIS) {
-            override fun onTick(millisUntilFinished: Long) {}
-
-            override fun onFinish() {
-                onTimeFinished.invoke()
-            }
-        }
-    }
-
-    private fun startTimer() {
-        countDownTimer?.start()
-    }
-
-    private fun stopTimer() {
-        countDownTimer?.cancel()
-    }
-
-    private fun clearTimer() {
-        stopTimer()
-        countDownTimer = null
-    }
-
     companion object {
         private const val SECOND_IN_MILLIS = 1000L
+        private const val MINUTE_IN_MILLIS = 60 * SECOND_IN_MILLIS
+
+        private var INSTANCE: InterstitialAdScheduler? = null
+
+        fun getInstance(): InterstitialAdScheduler {
+            return INSTANCE?.let {
+                INSTANCE
+            } ?: kotlin.run {
+                INSTANCE = InterstitialAdScheduler()
+                INSTANCE!!
+            }
+        }
     }
 }

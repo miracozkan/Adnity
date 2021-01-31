@@ -20,7 +20,7 @@ import com.mihanitylabs.adnitylib.util.provideAdRequest
 //│ 1/26/2021 - 9:31 PM         │
 //└─────────────────────────────┘
 
-object InterstitialAd {
+class InterstitialAdManager private constructor() {
 
     fun displayInterstitial(activity: Activity, interstitialAdConfig: InterstitialAdConfig) {
         provideInterstitialAd(
@@ -72,5 +72,16 @@ object InterstitialAd {
                     onResult.invoke(Resource.Success((interstitialAd)))
                 }
             })
+    }
+
+    internal companion object {
+        private var INSTANCE: InterstitialAdManager? = null
+
+        fun getInstance(): InterstitialAdManager {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE = InterstitialAdManager()
+                INSTANCE!!
+            }
+        }
     }
 }

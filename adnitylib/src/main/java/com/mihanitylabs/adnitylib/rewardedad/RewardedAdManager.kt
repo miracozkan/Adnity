@@ -20,7 +20,7 @@ import com.mihanitylabs.adnitylib.util.provideAdRequest
 //│ 1/26/2021 - 9:33 PM         │
 //└─────────────────────────────┘
 
-object RewardedAd {
+class RewardedAdManager private constructor() {
 
     fun displayRewardedAd(activity: Activity, rewardedAdConfig: RewardedAdConfig) {
         provideRewardedAd(activity, rewardedAdConfig.adId) { rewardedAdResource ->
@@ -67,5 +67,16 @@ object RewardedAd {
                     onResult.invoke(Resource.Success(rewardedAd))
                 }
             })
+    }
+
+    internal companion object {
+        private var INSTANCE: RewardedAdManager? = null
+
+        fun getInstance(): RewardedAdManager {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE = RewardedAdManager()
+                INSTANCE!!
+            }
+        }
     }
 }

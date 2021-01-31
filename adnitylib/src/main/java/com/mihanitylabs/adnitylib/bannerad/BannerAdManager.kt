@@ -16,7 +16,7 @@ import com.mihanitylabs.adnitylib.util.provideAdRequest
 //│ 1/26/2021 - 9:28 PM         │
 //└─────────────────────────────┘
 
-object BannerAd {
+class BannerAdManager private constructor() {
 
     fun provideBannerAd(context: Context, bannerAdConfig: BannerAdConfig) = AdView(context).apply {
         adUnitId = bannerAdConfig.adId
@@ -36,6 +36,17 @@ object BannerAd {
             override fun onAdClicked() {
                 super.onAdClicked()
                 bannerAdConfig.onAdClicked?.invoke()
+            }
+        }
+    }
+
+    internal companion object {
+        private var INSTANCE: BannerAdManager? = null
+
+        fun getInstance(): BannerAdManager {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE = BannerAdManager()
+                INSTANCE!!
             }
         }
     }

@@ -80,16 +80,14 @@ class InterstitialAdScheduler private constructor() : LifecycleObserver {
         clearTimer()
     }
 
-    companion object {
+    internal companion object {
         private const val SECOND_IN_MILLIS = 1000L
         private const val MINUTE_IN_MILLIS = 60 * SECOND_IN_MILLIS
 
         private var INSTANCE: InterstitialAdScheduler? = null
 
         fun getInstance(): InterstitialAdScheduler {
-            return INSTANCE?.let {
-                INSTANCE
-            } ?: kotlin.run {
+            return INSTANCE ?: synchronized(this) {
                 INSTANCE = InterstitialAdScheduler()
                 INSTANCE!!
             }

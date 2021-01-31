@@ -1,9 +1,6 @@
 package com.mihanitylabs.adnitylib.util
 
-import android.app.Application
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
-
 
 // Code with ❤️
 //┌─────────────────────────────┐
@@ -15,5 +12,3 @@ import com.google.android.gms.ads.MobileAds
 //└─────────────────────────────┘
 
 fun provideAdRequest(): AdRequest = AdRequest.Builder().build()
-
-fun Application.initAMobileAds() = MobileAds.initialize(this)

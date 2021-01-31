@@ -4,12 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
-import com.mihanitylabs.adnitylib.bannerad.BannerAd
+import com.mihanitylabs.adnitylib.Adnity
 import com.mihanitylabs.adnitylib.bannerad.BannerAdConfig
-import com.mihanitylabs.adnitylib.interstitialad.InterstitialAd
 import com.mihanitylabs.adnitylib.interstitialad.InterstitialAdConfig
-import com.mihanitylabs.adnitylib.interstitialad.InterstitialAdScheduler
-import com.mihanitylabs.adnitylib.rewardedad.RewardedAd
 import com.mihanitylabs.adnitylib.rewardedad.RewardedAdConfig
 
 class MainActivity : AppCompatActivity() {
@@ -41,16 +38,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        RewardedAd.displayRewardedAd(this, rewardedAdConfig)
+        val adnity = Adnity.getInstance(this)
 
-        InterstitialAd.displayInterstitial(this, interstitialAdConfig)
+        adnity.getRewardedAdManager().displayRewardedAd(this, rewardedAdConfig)
 
-        val adView: AdView = BannerAd.provideBannerAd(this, bannerAdConfig)
+        adnity.getInterstitialAdManager().displayInterstitial(this, interstitialAdConfig)
 
-        val interstitialAdScheduler = InterstitialAdScheduler.getInstance().apply {
+        val adView: AdView = adnity.getBannerAdManager().provideBannerAd(this, bannerAdConfig)
+
+        adnity.getInterstitialAdScheduler().apply {
             init(5)
             setOnTimeFinishedListener {
-                InterstitialAd.displayInterstitial(this@MainActivity, interstitialAdConfig)
+                adnity.getInterstitialAdManager()
+                    .displayInterstitial(this@MainActivity, interstitialAdConfig)
             }
         }
     }

@@ -14,7 +14,6 @@ import com.google.android.gms.ads.appopen.AppOpenAd
 import com.mihanitylabs.adnitylib.util.provideAdRequest
 import java.util.*
 
-
 // Code with ❤️
 //┌─────────────────────────────┐
 //│ Created by Mirac Ozkan      │
@@ -24,8 +23,7 @@ import java.util.*
 //│ 1/26/2021 - 9:33 PM         │
 //└─────────────────────────────┘
 
-
-class AppOpenAdManager(
+class AppOpenAdManager private constructor(
     private val application: Application,
     private val appOpenAdConfig: AppOpenAdConfig
 ) : Application.ActivityLifecycleCallbacks, LifecycleObserver {
@@ -58,7 +56,7 @@ class AppOpenAdManager(
         }
         AppOpenAd.load(
             application.applicationContext,
-            appOpenAdConfig.openAppAdId,
+            appOpenAdConfig.adId,
             provideAdRequest(),
             AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
             loadCallback
@@ -120,8 +118,20 @@ class AppOpenAdManager(
         currentActivity = null
     }
 
-    companion object {
+    internal companion object {
         private const val TAG = "AppOpenAdManager"
         private const val numMilliSecondsPerHour = 3600000L
+
+        private var INSTANCE: AppOpenAdManager? = null
+
+        fun getInstance(
+            application: Application,
+            appOpenAdConfig: AppOpenAdConfig
+        ): AppOpenAdManager {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE = AppOpenAdManager(application, appOpenAdConfig)
+                INSTANCE!!
+            }
+        }
     }
 }

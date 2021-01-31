@@ -1,6 +1,7 @@
 package com.mihanitylabs.adnitylib.openappad
 
 import com.google.android.gms.ads.appopen.AppOpenAd
+import com.mihanitylabs.adnitylib.core.BaseConfig
 
 
 // Code with ❤️
@@ -13,7 +14,7 @@ import com.google.android.gms.ads.appopen.AppOpenAd
 //└─────────────────────────────┘
 
 class AppOpenAdConfig(
-    val openAppAdId: String,
+    override val adId: String,
     val onSuccess: ((AppOpenAd) -> Unit)? = null,
     val onError: ((Exception) -> Unit)? = null
-)
+) : BaseConfig()

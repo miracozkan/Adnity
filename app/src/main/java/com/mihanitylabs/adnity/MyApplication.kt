@@ -1,10 +1,9 @@
 package com.mihanitylabs.adnity
 
 import android.app.Application
+import com.mihanitylabs.adnitylib.Adnity
 import com.mihanitylabs.adnitylib.openappad.AppOpenAdConfig
 import com.mihanitylabs.adnitylib.openappad.AppOpenAdManager
-import com.mihanitylabs.adnitylib.util.initAMobileAds
-
 
 // Code with ❤️
 //┌─────────────────────────────┐
@@ -27,8 +26,8 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        initAMobileAds()
-        appOpenAdManager = AppOpenAdManager(this, appOpenAdConfig)
+        val adnity = Adnity.getInstance(this.applicationContext)
+        appOpenAdManager = adnity.getAppOpenAdManager(this, appOpenAdConfig)
     }
 
     companion object {

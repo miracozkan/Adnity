@@ -9,6 +9,9 @@ import com.mihanitylabs.adnitylib.interstitialad.InterstitialAdScheduler
 import com.mihanitylabs.adnitylib.openappad.AppOpenAdConfig
 import com.mihanitylabs.adnitylib.openappad.AppOpenAdManager
 import com.mihanitylabs.adnitylib.rewardedad.RewardedAdManager
+import com.mihanitylabs.adnitylib.util.DependencyUtil
+import com.mihanitylabs.adnitylib.util.isAppPro
+import com.mihanitylabs.adnitylib.util.setAppPro
 
 
 //  Code with ❤️
@@ -21,6 +24,8 @@ import com.mihanitylabs.adnitylib.rewardedad.RewardedAdManager
 // └─────────────────────────────┘
 
 class Adnity private constructor(context: Context) {
+
+    private val sharedPreferences by lazy { DependencyUtil.provideSharedPreferences(context) }
 
     init {
         MobileAds.initialize(context)
@@ -36,6 +41,14 @@ class Adnity private constructor(context: Context) {
 
     fun getAppOpenAdManager(application: Application, appOpenAdConfig: AppOpenAdConfig) =
         AppOpenAdManager.getInstance(application, appOpenAdConfig)
+
+    fun isAppPro(): Boolean {
+        return sharedPreferences.isAppPro()
+    }
+
+    fun setAppPro() {
+        sharedPreferences.setAppPro()
+    }
 
     companion object {
         private var INSTANCE: Adnity? = null

@@ -46,3 +46,39 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     kapt "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 }
+
+ext {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    bintrayRepo = 'Adnity'
+    bintrayName = 'Adnity'
+
+    publishedGroupId = 'com.mihanity.adnitylib'
+    libraryName = 'adnitylib'
+    artifact = 'adnitylib'
+
+    libraryDescription = 'Google Play Services Ad Helper Library'
+
+    siteUrl = 'https://github.com/miracozkan/Adnity'
+    gitUrl = 'https://github.com/miracozkan/Adnity/issues'
+
+    libraryVersion = '1.0.7'      // library version
+
+    developerId = properties.getProperty("bintray.developerId")
+    developerName = properties.getProperty("bintray.developerName")
+    developerEmail = properties.getProperty("bintray.developerEmail")
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+tasks.withType(Javadoc) {
+    failOnError false
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
+
+apply from: 'publish.gradle'

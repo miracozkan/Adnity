@@ -34,7 +34,7 @@ class Adnity private constructor(context: Context) {
 
     fun getRewardedAdManager() = RewardedAdManager.getInstance()
 
-    fun getInterstitialAdManager(timeInterval: Long): InterstitialAdManager {
+    fun getInterstitialAdManager(timeInterval: Long = 30 * SECOND_IN_MILLIS): InterstitialAdManager {
         return InterstitialAdManager.getInstance(timeInterval)
     }
 

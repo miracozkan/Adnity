@@ -91,7 +91,7 @@ class InterstitialAdManager private constructor() {
         private var INSTANCE: InterstitialAdManager? = null
         private var timeInterval: Long = 30 * SECOND_IN_MILLIS
 
-        fun getInstance(interval: Long = 30 * SECOND_IN_MILLIS): InterstitialAdManager {
+        fun getInstance(interval: Long): InterstitialAdManager {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE = InterstitialAdManager()
                 timeInterval = interval

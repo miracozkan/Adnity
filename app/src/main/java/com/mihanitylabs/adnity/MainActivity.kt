@@ -11,6 +11,7 @@ import com.mihanitylabs.adnitylib.rewardedad.RewardedAdConfig
 
 class MainActivity : AppCompatActivity() {
 
+    //region Configs
     private val interstitialAdConfig = InterstitialAdConfig(
         adId = INTERSTITIAL_AD_ID,
         onAdShowedFullScreen = {},
@@ -33,26 +34,28 @@ class MainActivity : AppCompatActivity() {
         onAdFailedToLoad = {},
         onAdLoaded = {},
     )
+    //endregion
+
+    private val adnity by lazy { Adnity.getInstance(this) }
+    private val rewardedAdManager by lazy { adnity.getRewardedAdManager() }
+    private val interstitialAdManager by lazy { adnity.getInterstitialAdManager() }
+    private val bannerAdManager by lazy { adnity.getBannerAdManager() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
-        val adnity = Adnity.getInstance(this)
+    private fun onRewardedAdClick() {
+        rewardedAdManager.displayRewardedAd(this, rewardedAdConfig)
+    }
 
-        adnity.getRewardedAdManager().displayRewardedAd(this, rewardedAdConfig)
+    private fun onInterstitialAdClick() {
+        interstitialAdManager.displayInterstitialDependOnInterval(this, interstitialAdConfig)
+    }
 
-        adnity.getInterstitialAdManager().displayInterstitialDependOnInterval(this, interstitialAdConfig)
-
-        val adView: AdView = adnity.getBannerAdManager().provideBannerAd(this, bannerAdConfig)
-
-        adnity.getInterstitialAdScheduler().apply {
-            init(5)
-            setOnTimeFinishedListener {
-                adnity.getInterstitialAdManager()
-                    .displayInterstitialDependOnInterval(this@MainActivity, interstitialAdConfig)
-            }
-        }
+    private fun provideBannerAd(): AdView {
+        return bannerAdManager.provideBannerAd(this, bannerAdConfig)
     }
 
     companion object {

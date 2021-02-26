@@ -2,6 +2,7 @@ package com.mihanitylabs.adnitylib
 
 import android.app.Application
 import android.content.Context
+import android.text.format.DateUtils.SECOND_IN_MILLIS
 import com.google.android.gms.ads.MobileAds
 import com.mihanitylabs.adnitylib.bannerad.BannerAdManager
 import com.mihanitylabs.adnitylib.interstitialad.InterstitialAdManager
@@ -33,7 +34,9 @@ class Adnity private constructor(context: Context) {
 
     fun getRewardedAdManager() = RewardedAdManager.getInstance()
 
-    fun getInterstitialAdManager() = InterstitialAdManager.getInstance()
+    fun getInterstitialAdManager(timeInterval: Long): InterstitialAdManager {
+        return InterstitialAdManager.getInstance(timeInterval)
+    }
 
     fun getInterstitialAdScheduler() = InterstitialAdScheduler.getInstance()
 
@@ -53,7 +56,10 @@ class Adnity private constructor(context: Context) {
     companion object {
         private var INSTANCE: Adnity? = null
 
-        fun getInstance(context: Context): Adnity {
+        fun getInstance(
+            context: Context,
+            interstitialTimeInterval: Long = 30 * SECOND_IN_MILLIS
+        ): Adnity {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE = Adnity(context)
                 return INSTANCE!!

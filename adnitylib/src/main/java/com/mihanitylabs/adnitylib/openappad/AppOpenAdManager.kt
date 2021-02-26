@@ -12,6 +12,7 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.mihanitylabs.adnitylib.util.provideAdRequest
+import com.mihanitylabs.adnitylib.util.wasLoadTimeLessThanInterval
 import java.util.*
 
 // Code with ❤️
@@ -86,11 +87,9 @@ class AppOpenAdManager private constructor(
         }
     }
 
-    private fun isAdAvailable() = appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4)
-
-    private fun wasLoadTimeLessThanNHoursAgo(numHours: Long = 4): Boolean {
-        val dateDifference = Date().time - loadTime
-        return dateDifference < numMilliSecondsPerHour * numHours
+    private fun isAdAvailable(): Boolean {
+        return appOpenAd != null
+                && wasLoadTimeLessThanInterval(4 * numMilliSecondsPerHour, loadTime)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

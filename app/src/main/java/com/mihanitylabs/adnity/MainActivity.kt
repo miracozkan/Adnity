@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         adnity.getRewardedAdManager().displayRewardedAd(this, rewardedAdConfig)
 
-        adnity.getInterstitialAdManager().displayInterstitial(this, interstitialAdConfig)
+        adnity.getInterstitialAdManager().displayInterstitialDependOnInterval(this, interstitialAdConfig)
 
         val adView: AdView = adnity.getBannerAdManager().provideBannerAd(this, bannerAdConfig)
 
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             init(5)
             setOnTimeFinishedListener {
                 adnity.getInterstitialAdManager()
-                    .displayInterstitial(this@MainActivity, interstitialAdConfig)
+                    .displayInterstitialDependOnInterval(this@MainActivity, interstitialAdConfig)
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.mihanitylabs.adnitylib.util
 
 import com.google.android.gms.ads.AdRequest
-import java.util.*
 
 // Code with ❤️
 //┌─────────────────────────────┐
@@ -15,6 +14,6 @@ import java.util.*
 fun provideAdRequest(): AdRequest = AdRequest.Builder().build()
 
 fun wasLoadTimeLessThanInterval(interval: Long, loadTime: Long): Boolean {
-    val dateDifference = Date().time - loadTime
+    val dateDifference = System.currentTimeMillis() - loadTime
     return dateDifference < interval
 }

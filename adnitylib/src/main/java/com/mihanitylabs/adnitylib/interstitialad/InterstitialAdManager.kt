@@ -30,7 +30,7 @@ class InterstitialAdManager private constructor() {
         activity: Activity,
         interstitialAdConfig: InterstitialAdConfig
     ) {
-        if (!wasLoadTimeLessThanInterval(timeInterval, lastAdRequestAsTimeInMills)) return
+        if (wasLoadTimeLessThanInterval(timeInterval, lastAdRequestAsTimeInMills)) return
 
         displayInterstitial(activity, interstitialAdConfig)
     }

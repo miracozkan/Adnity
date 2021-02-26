@@ -1,6 +1,7 @@
 package com.mihanitylabs.adnity
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -41,9 +42,15 @@ class MainActivity : AppCompatActivity() {
     private val interstitialAdManager by lazy { adnity.getInterstitialAdManager() }
     private val bannerAdManager by lazy { adnity.getBannerAdManager() }
 
+    private val btnRewardedAd by lazy { findViewById<Button>(R.id.btnRewardedAd) }
+    private val btnInterstitialAd by lazy { findViewById<Button>(R.id.btnInterstitialAd) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        btnRewardedAd.setOnClickListener { onRewardedAdClick() }
+        btnInterstitialAd.setOnClickListener { onInterstitialAdClick() }
     }
 
     private fun onRewardedAdClick() {
@@ -59,8 +66,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val INTERSTITIAL_AD_ID = ""
-        private const val BANNER_AD_ID = ""
-        private const val REWARDED_AD_ID = ""
+        private const val INTERSTITIAL_AD_ID = "ca-app-pub-3940256099942544/1033173712"
+        private const val BANNER_AD_ID = "ca-app-pub-3940256099942544/6300978111"
+        private const val REWARDED_AD_ID = "ca-app-pub-3940256099942544/5224354917"
     }
 }

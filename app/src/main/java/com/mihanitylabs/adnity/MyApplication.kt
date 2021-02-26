@@ -3,6 +3,7 @@ package com.mihanitylabs.adnity
 import android.app.Application
 import com.mihanitylabs.adnitylib.Adnity
 import com.mihanitylabs.adnitylib.openappad.AppOpenAdConfig
+import com.mihanitylabs.adnitylib.openappad.AppOpenAdManager
 
 // Code with ❤️
 //┌─────────────────────────────┐
@@ -16,7 +17,7 @@ import com.mihanitylabs.adnitylib.openappad.AppOpenAdConfig
 class MyApplication : Application() {
 
     private val adnity by lazy { Adnity.getInstance(this.applicationContext) }
-    private val appOpenAdManager by lazy { adnity.getAppOpenAdManager(this, appOpenAdConfig) }
+    private lateinit var appOpenAdManager: AppOpenAdManager
 
     private val appOpenAdConfig = AppOpenAdConfig(
         adId = APP_OPEN_AD_ID,
@@ -24,7 +25,12 @@ class MyApplication : Application() {
         onError = {}
     )
 
+    override fun onCreate() {
+        super.onCreate()
+        appOpenAdManager = adnity.getAppOpenAdManager(this, appOpenAdConfig)
+    }
+
     companion object {
-        private const val APP_OPEN_AD_ID = ""
+        private const val APP_OPEN_AD_ID = "ca-app-pub-3940256099942544/3419835294"
     }
 }

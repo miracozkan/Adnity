@@ -46,6 +46,6 @@ dependencies {
     def gmsPlayServicesAdVersion = "19.7.0"
     implementation "com.google.android.gms:play-services-ads:$gmsPlayServicesAdVersion"
 
-    implementation project(path: ':adnitylib')
-//    implementation 'com.mihanity.adnitylib:adnitylib:1.0.2'
+//    implementation project(path: ':adnitylib')
+    implementation 'com.mihanity.adnitylib:adnitylib:1.0.4'
 }

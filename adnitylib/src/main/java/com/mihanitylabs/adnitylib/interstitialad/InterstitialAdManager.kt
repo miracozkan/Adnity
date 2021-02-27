@@ -2,12 +2,12 @@ package com.mihanitylabs.adnitylib.interstitialad
 
 import android.app.Activity
 import android.content.Context
-import android.text.format.DateUtils.SECOND_IN_MILLIS
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.mihanitylabs.adnitylib.Adnity
 import com.mihanitylabs.adnitylib.util.Resource
 import com.mihanitylabs.adnitylib.util.provideAdRequest
 import com.mihanitylabs.adnitylib.util.wasLoadTimeLessThanInterval
@@ -89,12 +89,11 @@ class InterstitialAdManager private constructor() {
 
     internal companion object {
         private var INSTANCE: InterstitialAdManager? = null
-        private var timeInterval: Long = 30 * SECOND_IN_MILLIS
+        private val timeInterval: Long get() = Adnity.interval
 
-        fun getInstance(interval: Long): InterstitialAdManager {
+        fun getInstance(): InterstitialAdManager {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE = InterstitialAdManager()
-                timeInterval = interval
                 INSTANCE!!
             }
         }

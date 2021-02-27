@@ -63,7 +63,7 @@ ext {
     siteUrl = 'https://github.com/miracozkan/Adnity'
     gitUrl = 'https://github.com/miracozkan/Adnity/issues'
 
-    libraryVersion = '1.0.7'      // library version
+    libraryVersion = '1.0.8'      // library version
 
     developerId = properties.getProperty("bintray.developerId")
     developerName = properties.getProperty("bintray.developerName")

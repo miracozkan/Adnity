@@ -34,8 +34,8 @@ class Adnity private constructor(context: Context) {
 
     fun getRewardedAdManager() = RewardedAdManager.getInstance()
 
-    fun getInterstitialAdManager(timeInterval: Long = 30 * SECOND_IN_MILLIS): InterstitialAdManager {
-        return InterstitialAdManager.getInstance(timeInterval)
+    fun getInterstitialAdManager(): InterstitialAdManager {
+        return InterstitialAdManager.getInstance()
     }
 
     fun getInterstitialAdScheduler() = InterstitialAdScheduler.getInstance()
@@ -55,6 +55,7 @@ class Adnity private constructor(context: Context) {
 
     companion object {
         private var INSTANCE: Adnity? = null
+        var interval = 30 * SECOND_IN_MILLIS
 
         fun getInstance(
             context: Context,
@@ -62,8 +63,13 @@ class Adnity private constructor(context: Context) {
         ): Adnity {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE = Adnity(context)
+                interval = interstitialTimeInterval
                 return INSTANCE!!
             }
+        }
+
+        fun changeInterstitialTimeInterval(interstitialTimeInterval: Long) {
+            interval = interstitialTimeInterval
         }
     }
 }

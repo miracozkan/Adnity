@@ -42,6 +42,6 @@ fun SharedPreferences.isAppPro(): Boolean {
     return getValue(this, APP_PRO_KEY, false) as Boolean
 }
 
-fun SharedPreferences.setAppPro() {
-    putValue(this, APP_PRO_KEY, true)
+fun SharedPreferences.changeAppProState(isPro: Boolean) {
+    putValue(this, APP_PRO_KEY, isPro)
 }

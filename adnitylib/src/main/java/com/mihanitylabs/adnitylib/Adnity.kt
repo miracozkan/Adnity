@@ -11,8 +11,8 @@ import com.mihanitylabs.adnitylib.openappad.AppOpenAdConfig
 import com.mihanitylabs.adnitylib.openappad.AppOpenAdManager
 import com.mihanitylabs.adnitylib.rewardedad.RewardedAdManager
 import com.mihanitylabs.adnitylib.util.DependencyUtil
+import com.mihanitylabs.adnitylib.util.changeAppProState
 import com.mihanitylabs.adnitylib.util.isAppPro
-import com.mihanitylabs.adnitylib.util.setAppPro
 
 
 //  Code with ❤️
@@ -49,8 +49,8 @@ class Adnity private constructor(context: Context) {
         return sharedPreferences.isAppPro()
     }
 
-    fun setAppPro() {
-        sharedPreferences.setAppPro()
+    fun changeAppProState(isPro: Boolean) {
+        sharedPreferences.changeAppProState(isPro)
     }
 
     companion object {

@@ -7,7 +7,9 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.mihanitylabs.adnitylib.util.NetworkHelper
 import com.mihanitylabs.adnitylib.util.Resource
+import com.mihanitylabs.adnitylib.util.exception.InternetClosedException
 import com.mihanitylabs.adnitylib.util.provideAdRequest
 
 
@@ -54,6 +56,10 @@ class RewardedAdManager private constructor() {
         onResult: (Resource<RewardedAd>) -> Unit
     ) {
         onResult.invoke(Resource.Loading)
+        if (NetworkHelper.isNetworkEnable(context).not()) {
+            onResult.invoke(Resource.Error(InternetClosedException()))
+            return
+        }
         RewardedAd.load(
             context,
             rewardedAdId,

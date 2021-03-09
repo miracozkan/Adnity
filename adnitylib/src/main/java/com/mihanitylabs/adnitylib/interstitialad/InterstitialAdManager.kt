@@ -8,7 +8,9 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.mihanitylabs.adnitylib.Adnity
+import com.mihanitylabs.adnitylib.util.NetworkHelper
 import com.mihanitylabs.adnitylib.util.Resource
+import com.mihanitylabs.adnitylib.util.exception.InternetClosedException
 import com.mihanitylabs.adnitylib.util.provideAdRequest
 import com.mihanitylabs.adnitylib.util.wasLoadTimeLessThanInterval
 
@@ -72,6 +74,10 @@ class InterstitialAdManager private constructor() {
         onResult: (Resource<InterstitialAd>) -> Unit
     ) {
         onResult.invoke(Resource.Loading)
+        if (NetworkHelper.isNetworkEnable(context).not()) {
+            onResult.invoke(Resource.Error(InternetClosedException()))
+            return
+        }
         InterstitialAd.load(
             context,
             interstitialAdId,
